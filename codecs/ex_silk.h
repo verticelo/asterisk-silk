@@ -85,10 +85,9 @@ static struct ast_frame *silk8_sample(void)
     .src = __PRETTY_FUNCTION__,
     .data.ptr = ex_silk8
   };
-  ast_format_set(&f.subclass.format, AST_FORMAT_SILK, 1,
-                 SILK_ATTR_KEY_SAMP_RATE,
-                 SILK_ATTR_VAL_SAMP_8KHZ,
-                 AST_FORMAT_ATTR_END);
+
+  f.subclass.format = ast_format_silk8;
+
   return &f;
 
 }
@@ -104,10 +103,9 @@ static struct ast_frame *silk12_sample(void)
     .src = __PRETTY_FUNCTION__,
     .data.ptr = ex_silk12
   };
-  ast_format_set(&f.subclass.format, AST_FORMAT_SILK, 1,
-                 SILK_ATTR_KEY_SAMP_RATE,
-                 SILK_ATTR_VAL_SAMP_12KHZ,
-                 AST_FORMAT_ATTR_END);
+
+  f.subclass.format = ast_format_silk12;
+
   return &f;
 
 }
@@ -123,10 +121,9 @@ static struct ast_frame *silk16_sample(void)
     .src = __PRETTY_FUNCTION__,
     .data.ptr = ex_silk16
   };
-  ast_format_set(&f.subclass.format, AST_FORMAT_SILK, 1,
-                 SILK_ATTR_KEY_SAMP_RATE,
-                 SILK_ATTR_VAL_SAMP_16KHZ,
-                 AST_FORMAT_ATTR_END);
+
+  f.subclass.format = ast_format_silk16;
+
   return &f;
 
 }
@@ -142,10 +139,9 @@ static struct ast_frame *silk24_sample(void)
     .src = __PRETTY_FUNCTION__,
     .data.ptr = ex_silk24
   };
-  ast_format_set(&f.subclass.format, AST_FORMAT_SILK, 1,
-                 SILK_ATTR_KEY_SAMP_RATE,
-                 SILK_ATTR_VAL_SAMP_24KHZ,
-                 AST_FORMAT_ATTR_END);
+  
+  f.subclass.format = ast_format_silk24;
+
   return &f;
 
 }

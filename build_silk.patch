@@ -1,0 +1,25 @@
+--- build_tools/menuselect-deps.in	(Asterisk 13.6.0)
++++ build_tools/menuselect-deps.in	(working copy)
+@@ -55,2 +55,3 @@
+ LAUNCHD=@PBX_LAUNCHD@
++SILK=@PBX_SILK@
+ SPANDSP=@PBX_SPANDSP@
+--- configure.ac	(Asterisk 13.6.0)
++++ configure.ac	(working copy)
+@@ -493,2 +493,3 @@
+ AST_EXT_LIB_SETUP([RESAMPLE], [LIBRESAMPLE], [resample])
++AST_EXT_LIB_SETUP([SILK], [SILK Audio Decoder/Encoder], [SKP_SILK_SDK])
+ AST_EXT_LIB_SETUP([SDL], [Sdl], [sdl])
+@@ -2125,2 +2126,4 @@
+ 
++AST_EXT_LIB_CHECK([SILK], [SKP_SILK_SDK], [SKP_Silk_SDK_InitEncoder], [SKP_Silk_SDK_API.h])
++
+ AST_C_COMPILE_CHECK([SPANDSP], [
+--- makeopts.in	(Asterisk 13.6.0)
++++ makeopts.in	(working copy)
+@@ -314,2 +314,5 @@
+ 
++SILK_INCLUDE=@SILK_INCLUDE@
++SILK_LIB=@SILK_LIB@
++
+ HAVE_DAHDI=@PBX_DAHDI@
