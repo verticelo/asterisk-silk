@@ -103,7 +103,6 @@ static struct ast_frame *lintosilk_frameout(struct ast_trans_pvt *pvt)
   int datalen = 0;
   int samples = 0;
   int numPackets = 0;
-  struct ast_frame *f;
 
   /* we can only work on multiples of a 10 ms sample
    * and no more than encControl->packetSize.
@@ -143,24 +142,7 @@ static struct ast_frame *lintosilk_frameout(struct ast_trans_pvt *pvt)
     memmove(coder->buf, coder->buf + samples, pvt->samples *2);
   }
 
-  if(datalen == 0){
-    /* we shoved a bunch of samples in, but got no packets
-     * out. We return NULL to the caller, like
-     * if we could not encode anything */
-    return NULL;
-  }
-
-  /* we build the frame ourselves because we have an explicit dest */
-  f = &pvt->f;
-  f->samples = coder->encControl.packetSize * numPackets;
-  f->datalen = datalen;
-  f->frametype = AST_FRAME_VOICE;
-  f->subclass.format = pvt->f.subclass.format;
-  f->mallocd = 0;
-  f->offset = AST_FRIENDLY_OFFSET;
-  f->src = pvt->t->name;
-  f->data.ptr = pvt->outbuf.c;
-  return ast_frisolate(f);
+  return ast_trans_frameout(pvt, datalen, coder->encControl.packetSize * numPackets);
 }
 
 static int silktolin_framein(struct ast_trans_pvt *pvt, struct ast_frame *f)
