@@ -4,7 +4,7 @@ To add a codec for SIP/SDP (m=, rtmap, and ftmp), you create a format module in 
 
 The ZIP file for SILK contains the latest RTP payload-format description in the folder `doc`. This repository here is an wrapper implementation of that document. SILK is [deprecated](http://blogs.skype.com/2012/09/12/skype-and-a-new-audio-codec/) since September 2012 because its work continues within the [Opus Codec](http://tools.ietf.org/html/rfc7587) in the mode Linear Prediction ([LP](http://wiki.xiph.org/OpusFAQ#Is_the_SILK_part_of_Opus_compatible_with_the_SILK_implementation_shipped_in_Skype.3F)). Nevertheless, you are here because you have a VoIP client which does not support Opus yet but still supports SILK. Or you want to learn more about SILK because it is one foundation of Opus. Research papers comparing SILK with other audio codecs: InterSpeech [2010](http://research.nokia.com/files/public/%5B12%5D_Interspeech%202010_Voice%20Quality%20Evaluation%20of%20Recent%20Open%20Source%20Codecs.pdf) and [2011](http://research.nokia.com/files/public/%5B16%5D_InterSpeech2011_Voice_Quality_Characterization_of_IETF_Opus_Codec.pdf). Further [examples…](http://www.opus-codec.org/examples/)
 
-This patch is for Asterisk 13. If you use Asterisk 11, please, consider the [binaries created by Digium](http://www.digium.com/products/asterisk/downloads) or [this…](http://github.com/mordak/codec_silk).
+This patch is for Asterisk 13. If you use Asterisk 11, please, consider the [binaries created by Digium](http://www.digium.com/products/asterisk/downloads) or [this…](http://github.com/mordak/codec_silk)
 
 ## Installing the patch
 
