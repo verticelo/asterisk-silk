@@ -98,51 +98,46 @@ static struct ast_frame *lintosilk_frameout(struct ast_trans_pvt *pvt)
 {
 
   struct silk_coder_pvt *coder = pvt->pvt;
-  SKP_int ret = 0;
-  SKP_int16 nBytesOut = 0;
-  int datalen = 0;
-  int samples = 0;
-  int numPackets = 0;
-
-  /* we can only work on multiples of a 10 ms sample
-   * and no more than encControl->packetSize.
-   * So we shove in packetSize samples repeatedly until
-   * we are out */
-
-  /* We only do stuff if we have more than packetSize */
-  if (pvt->samples < coder->encControl.packetSize) {
-    return NULL;
-  }
+  struct ast_frame *result = NULL;
+  struct ast_frame *last = NULL;
+  int samples = 0; /* output samples */
 
   while (pvt->samples >= coder->encControl.packetSize) {
-
-    nBytesOut = SILK_BUFFER_SIZE_BYTES - datalen;
-    ret = SKP_Silk_SDK_Encode(coder->psEnc,
+    struct ast_frame *current;
+    SKP_int16 nBytesOut = SILK_BUFFER_SIZE_BYTES;
+    SKP_int ret = SKP_Silk_SDK_Encode(coder->psEnc,
                               &coder->encControl,
                               (SKP_int16*)(coder->buf + samples),
                               coder->encControl.packetSize,
-                              (SKP_uint8*)(pvt->outbuf.ui8 + datalen),
+                              (SKP_uint8*) pvt->outbuf.ui8,
                               &nBytesOut);
-    if (ret) {
-      ast_log(LOG_WARNING, "Silk_Encode returned %d\n", ret);
-    }
 
-    /* nBytesOut now holds the number of bytes encoded */
-    datalen += nBytesOut;
     samples += coder->encControl.packetSize;
     pvt->samples -= coder->encControl.packetSize;
-    if(nBytesOut > 0){
-      /* if stuff came out, we have encoded a packet */
-      numPackets++;
+
+    if (ret) {
+      ast_log(LOG_WARNING, "Silk_Encode returned %d\n", ret);
+      current = NULL;
+    } else {
+      current = ast_trans_frameout(pvt, nBytesOut, coder->encControl.packetSize);
     }
+
+    if (!current) {
+      continue;
+    } else if (last) {
+      AST_LIST_NEXT(last, frame_list) = current;
+    } else {
+      result = current;
+    }
+    last = current;
   }
 
-  /* Move the remaining buffer stuff down */
-  if (pvt->samples) {
+  /* Move the data at the end of the buffer to the front */
+  if (samples) {
     memmove(coder->buf, coder->buf + samples, pvt->samples *2);
   }
 
-  return ast_trans_frameout(pvt, datalen, coder->encControl.packetSize * numPackets);
+  return result;
 }
 
 static int silktolin_framein(struct ast_trans_pvt *pvt, struct ast_frame *f)
