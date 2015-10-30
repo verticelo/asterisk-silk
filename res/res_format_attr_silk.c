@@ -7,7 +7,7 @@
 
 #include <SKP_Silk_SDK_API.h>
 
-/* Asterisk internal defaults; can differ from RFC defaults */ 
+/* Asterisk internal defaults; can differ from RFC defaults */
 static SKP_SILK_SDK_EncControlStruct default_silk_attr = {
 	.useDTX               = 0,             /* off              */
 	.useInBandFEC         = 1,             /* supported        */
@@ -77,7 +77,7 @@ static void silk_generate_sdp_fmtp(const struct ast_format *format, unsigned int
 		attr = &default_silk_attr;
 	}
 
-	if (attr->bitRate != SKP_int32_MAX) { 
+	if (attr->bitRate != SKP_int32_MAX) {
 		if (appended) {
 			ast_str_append(str, 0, "; ");
 		} else {
@@ -87,7 +87,7 @@ static void silk_generate_sdp_fmtp(const struct ast_format *format, unsigned int
 		ast_str_append(str, 0, "maxaveragebitrate=%u", attr->bitRate);
 	}
 
-	if (attr->useDTX != 0) { 
+	if (attr->useDTX != 0) {
 		if (appended) {
 			ast_str_append(str, 0, "; ");
 		} else {
@@ -97,7 +97,7 @@ static void silk_generate_sdp_fmtp(const struct ast_format *format, unsigned int
 		ast_str_append(str, 0, "usedtx=%u", attr->useDTX);
 	}
 
-	if (attr->useInBandFEC != 1) { 
+	if (attr->useInBandFEC != 1) {
 		if (appended) {
 			ast_str_append(str, 0, "; ");
 		} else {
