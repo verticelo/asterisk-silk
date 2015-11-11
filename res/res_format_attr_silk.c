@@ -44,6 +44,7 @@ static struct ast_format *silk_parse_sdp_fmtp(const struct ast_format *format, c
 {
 	struct ast_format *cloned;
 	SKP_SILK_SDK_EncControlStruct *attr;
+	const char *kvp;
 	unsigned int val;
 
 	cloned = ast_format_clone(format);
@@ -52,17 +53,24 @@ static struct ast_format *silk_parse_sdp_fmtp(const struct ast_format *format, c
 	}
 	attr = ast_format_get_attribute_data(cloned);
 
-	attr->bitRate = SKP_int32_MAX;
-	if (sscanf(attributes, "maxaveragebitrate=%30u", &val) == 1) {
+	/* defaults see "RTP Payload Format" description which comes with SILK */
+
+	if ((kvp = strstr(attributes, "maxaveragebitrate")) && sscanf(kvp, "maxaveragebitrate=%30u", &val) == 1) {
 		attr->bitRate = val;
+	} else {
+		attr->bitRate = SKP_int32_MAX;
 	}
-	attr->useDTX = 0;
-	if (sscanf(attributes, "usedtx=%30u", &val) == 1) {
+
+	if ((kvp = strstr(attributes, "usedtx")) && sscanf(kvp, "usedtx=%30u", &val) == 1) {
 		attr->useDTX = val;
+	} else {
+		attr->useDTX = 0;
 	}
-	attr->useInBandFEC = 1;
-	if (sscanf(attributes, "useinbandfec=%30u", &val) == 1) {
+
+	if ((kvp = strstr(attributes, "useinbandfec")) && sscanf(kvp, "useinbandfec=%30u", &val) == 1) {
 		attr->useInBandFEC = val;
+	} else {
+		attr->useInBandFEC = 1;
 	}
 
 	return cloned;
