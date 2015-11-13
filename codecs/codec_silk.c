@@ -204,7 +204,7 @@ static int silktolin_framein(struct ast_trans_pvt *pvt, struct ast_frame *f)
     /* set the decodeIterations for the do{}while() to be the
      * number of frames in the last decoded packet */
     decodeIterations = coder->decControl.framesPerPacket;
-    ast_log(LOG_NOTICE, "silktolin indicated lost packet - no LBRR");
+    ast_log(LOG_NOTICE, "silktolin indicated lost packet - no LBRR\n");
   }
 
   do {
@@ -450,16 +450,16 @@ static int load_module(void)
   int res = 0;
 
   /* print the skype version */
-  ast_log(LOG_NOTICE, "SILK Version : %s\n", SKP_Silk_SDK_get_version());
+  ast_log(LOG_NOTICE, "SILK %s\n", SKP_Silk_SDK_get_version());
 
   /* get the encoder / decoder sizes */
   ret = SKP_Silk_SDK_Get_Encoder_Size(&encSizeBytes);
   if (ret) {
-    ast_log(LOG_WARNING, "SKP_Silk_SDK_Get_Encoder_size returned %d", ret);
+    ast_log(LOG_WARNING, "SKP_Silk_SDK_Get_Encoder_size returned %d\n", ret);
   }
   ret = SKP_Silk_SDK_Get_Decoder_Size(&decSizeBytes);
   if (ret) {
-    ast_log(LOG_WARNING, "SKP_Silk_SDK_Get_Decoder_size returned %d", ret);
+    ast_log(LOG_WARNING, "SKP_Silk_SDK_Get_Decoder_size returned %d\n", ret);
   }
 
   res |= ast_register_translator(&silk8tolin);
