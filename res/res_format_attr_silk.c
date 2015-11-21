@@ -87,7 +87,7 @@ static void silk_generate_sdp_fmtp(const struct ast_format *format, unsigned int
 
 	if (attr->bitRate != SKP_int32_MAX) {
 		if (appended) {
-			ast_str_append(str, 0, "; ");
+			ast_str_append(str, 0, ";");
 		} else {
 			appended = 1;
 			ast_str_append(str, 0, "a=fmtp:%u ", payload);
@@ -97,7 +97,7 @@ static void silk_generate_sdp_fmtp(const struct ast_format *format, unsigned int
 
 	if (attr->useDTX != 0) {
 		if (appended) {
-			ast_str_append(str, 0, "; ");
+			ast_str_append(str, 0, ";");
 		} else {
 			appended = 1;
 			ast_str_append(str, 0, "a=fmtp:%u ", payload);
@@ -107,7 +107,7 @@ static void silk_generate_sdp_fmtp(const struct ast_format *format, unsigned int
 
 	if (attr->useInBandFEC != 1) {
 		if (appended) {
-			ast_str_append(str, 0, "; ");
+			ast_str_append(str, 0, ";");
 		} else {
 			appended = 1;
 			ast_str_append(str, 0, "a=fmtp:%u ", payload);
