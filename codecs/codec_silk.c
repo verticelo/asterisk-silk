@@ -4,17 +4,15 @@
 
 #include "asterisk.h"
 
-#include "asterisk/translate.h"
+#include "asterisk/codec.h"             /* for AST_MEDIA_TYPE_AUDIO */
+#include "asterisk/format.h"            /* for ast_format_get_attribute_data */
+#include "asterisk/frame.h"             /* for ast_frame, etc */
+#include "asterisk/linkedlists.h"       /* for AST_LIST_NEXT, etc */
+#include "asterisk/logger.h"            /* for ast_log, ast_debug, etc */
 #include "asterisk/module.h"
-#include "asterisk/format.h"
-#include "asterisk/utils.h"
-
-#include "asterisk/slin.h"
+#include "asterisk/translate.h"         /* for ast_trans_pvt, etc */
 
 #include <SKP_Silk_SDK_API.h>
-#include "ex_silk.h"
-
-#include "asterisk/logger.h"
 
 #define SILK_FRAME_LENGTH_MS       20
 #define SILK_MAX_BYTES_PER_FRAME   1024 /* apparently.. */
@@ -24,6 +22,10 @@
 
 #define SILK_BUFFER_SIZE_BYTES 5120 /* MAX_BYTES * MAX_FRAMES */
 #define SLIN_BUFFER_SIZE_BYTES 9600 /* 100 ms @ 48KHZ * 2 bytes  */
+
+/* Sample frame data */
+#include "asterisk/slin.h"
+#include "ex_silk.h"
 
 SKP_int32 encSizeBytes;
 SKP_int32 decSizeBytes;

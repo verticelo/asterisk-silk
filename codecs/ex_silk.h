@@ -5,6 +5,9 @@
  *
  */
 
+#include "asterisk/format_cache.h"      /* for ast_format_silk */
+#include "asterisk/frame.h"             /* for ast_frame, etc */
+
 /* Samples generated from the encoder program
  * included with the silk source */
 

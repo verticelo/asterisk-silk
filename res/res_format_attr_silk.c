@@ -1,9 +1,9 @@
 #include "asterisk.h"
 
-#include "math.h"
-
 #include "asterisk/module.h"
 #include "asterisk/format.h"
+#include "asterisk/strings.h"           /* for ast_str_append */
+#include "asterisk/utils.h"             /* for MAX, MIN, ast_calloc, etc */
 
 #include <SKP_Silk_SDK_API.h>
 
