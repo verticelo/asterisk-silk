@@ -79,43 +79,40 @@ static struct ast_format *silk_parse_sdp_fmtp(const struct ast_format *format, c
 static void silk_generate_sdp_fmtp(const struct ast_format *format, unsigned int payload, struct ast_str **str)
 {
 	SKP_SILK_SDK_EncControlStruct *attr = ast_format_get_attribute_data(format);
-	int appended = 0;
+	int added = 0;
 
 	if (!attr) {
 		attr = &default_silk_attr;
 	}
 
 	if (attr->bitRate != SKP_int32_MAX) {
-		if (appended) {
+		if (added) {
 			ast_str_append(str, 0, ";");
-		} else {
-			appended = 1;
-			ast_str_append(str, 0, "a=fmtp:%u ", payload);
+		} else if (0 < ast_str_append(str, 0, "a=fmtp:%u ", payload)) {
+			added = 1;
 		}
 		ast_str_append(str, 0, "maxaveragebitrate=%u", attr->bitRate);
 	}
 
 	if (attr->useDTX != 0) {
-		if (appended) {
+		if (added) {
 			ast_str_append(str, 0, ";");
-		} else {
-			appended = 1;
-			ast_str_append(str, 0, "a=fmtp:%u ", payload);
+		} else if (0 < ast_str_append(str, 0, "a=fmtp:%u ", payload)) {
+			added = 1;
 		}
 		ast_str_append(str, 0, "usedtx=%u", attr->useDTX);
 	}
 
 	if (attr->useInBandFEC != 1) {
-		if (appended) {
+		if (added) {
 			ast_str_append(str, 0, ";");
-		} else {
-			appended = 1;
-			ast_str_append(str, 0, "a=fmtp:%u ", payload);
+		} else if (0 < ast_str_append(str, 0, "a=fmtp:%u ", payload)) {
+			added = 1;
 		}
 		ast_str_append(str, 0, "useinbandfec=%u", attr->useInBandFEC);
 	}
 
-	if (appended) {
+	if (added) {
 		ast_str_append(str, 0, "\r\n");
 	}
 }
