@@ -31,9 +31,9 @@ SKP_int32 encSizeBytes;
 SKP_int32 decSizeBytes;
 
 struct silk_coder_pvt {
-  void* psEnc;
+  void *psEnc;
   SKP_SILK_SDK_EncControlStruct encControl;
-  void* psDec;
+  void *psDec;
   SKP_SILK_SDK_DecControlStruct decControl;
   int16_t buf[SLIN_BUFFER_SIZE_BYTES / 2];
 };
