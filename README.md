@@ -8,7 +8,7 @@ This patch is for Asterisk 13. If you use Asterisk 11, please, consider the [b
 
 ## Installing the patch
 
-The patch was built on top of Asterisk 13.6.0. If you use a newer version and the patch fails, please, [report](http://help.github.com/articles/creating-an-issue/)!
+The patch was built on top of Asterisk 13.7.2. If you use a newer version and the patch fails, please, [report](http://help.github.com/articles/creating-an-issue/)!
 
     cd /usr/src/
     wget downloads.asterisk.org/pub/telephony/asterisk/asterisk-13-current.tar.gz

@@ -43,7 +43,7 @@ struct silk_coder_pvt {
 static int lintosilk_new(struct ast_trans_pvt *pvt)
 {
 	SKP_int32 ret;
-	SKP_SILK_SDK_EncControlStruct *attr = pvt->f.subclass.format ? ast_format_get_attribute_data(pvt->f.subclass.format) : NULL;
+	SKP_SILK_SDK_EncControlStruct *attr = pvt->explicit_dst ? ast_format_get_attribute_data(pvt->explicit_dst) : NULL;
 	struct silk_coder_pvt *coder = pvt->pvt;
 
 	/* init the silk encoder */
