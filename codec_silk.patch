@@ -1,8 +1,6 @@
 --- include/asterisk/format_cache.h	(Asterisk 13.6.0)
 +++ include/asterisk/format_cache.h	(working copy)
-@@ -99,6 +99,26 @@
- extern struct ast_format *ast_format_adpcm;
- 
+@@ -211,2 +211,22 @@
  /*!
 + * \brief Built-in cached silk8 format.
 + */
@@ -24,9 +22,7 @@
 +extern struct ast_format *ast_format_silk24;
 +
 +/*!
-  * \brief Built-in cached g722 format.
-  */
- extern struct ast_format *ast_format_g722;
+  * \brief Built-in cached t140 format.
 --- include/asterisk/format_compatibility.h	(Asterisk 13.6.0)
 +++ include/asterisk/format_compatibility.h	(working copy)
 @@ -93,6 +93,14 @@
@@ -123,9 +119,7 @@
  	return res;
 --- main/format_cache.c	(Asterisk 13.6.0)
 +++ main/format_cache.c	(working copy)
-@@ -228,6 +228,26 @@
- struct ast_format *ast_format_t140_red;
- 
+@@ -230,2 +230,24 @@
  /*!
 + * \brief Built-in cached silk8 format.
 + */
@@ -147,9 +141,7 @@
 +struct ast_format *ast_format_silk24;
 +
 +/*!
-  * \brief Built-in "null" format.
-  */
- struct ast_format *ast_format_none;
+  * \brief Built-in cached t140 format.
 @@ -330,6 +350,10 @@
  	ao2_replace(ast_format_vp8, NULL);
  	ao2_replace(ast_format_t140_red, NULL);
