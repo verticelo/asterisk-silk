@@ -1,50 +1,19 @@
---- include/asterisk/format_cache.h	(Asterisk 13.6.0)
+--- include/asterisk/format_cache.h	(Asterisk 13.10.0)
 +++ include/asterisk/format_cache.h	(working copy)
-@@ -211,2 +211,22 @@
+@@ -226,2 +226,10 @@
  /*!
-+ * \brief Built-in cached silk8 format.
++ * \brief Built-in cached SILK format.
 + */
 +extern struct ast_format *ast_format_silk8;
-+
-+/*!
-+ * \brief Built-in cached silk12 format.
-+ */
 +extern struct ast_format *ast_format_silk12;
-+
-+/*!
-+ * \brief Built-in cached silk16 format.
-+ */
 +extern struct ast_format *ast_format_silk16;
-+
-+/*!
-+ * \brief Built-in cached silk24 format.
-+ */
 +extern struct ast_format *ast_format_silk24;
 +
 +/*!
-  * \brief Built-in cached t140 format.
---- include/asterisk/format_compatibility.h	(Asterisk 13.6.0)
-+++ include/asterisk/format_compatibility.h	(working copy)
-@@ -93,6 +93,14 @@
- #define AST_FORMAT_T140_RED (1ULL << 26)
- /*! T.140 Text format - ITU T.140, RFC 4103 */
- #define AST_FORMAT_T140 (1ULL << 27)
-+/*! SILK8 Audio */
-+#define AST_FORMAT_SILK8 (1ULL << 38)
-+/*! SILK12 Audio */
-+#define AST_FORMAT_SILK12 (1ULL << 39)
-+/*! SILK16 Audio */
-+#define AST_FORMAT_SILK16 (1ULL << 40)
-+/*! SILK24 Audio */
-+#define AST_FORMAT_SILK24 (1ULL << 41)
- 
- /*!
-  * \brief Convert a format structure to its respective bitfield
---- main/codec_builtin.c	(Asterisk 13.6.0)
+  * \brief Initialize format cache support within the core.
+--- main/codec_builtin.c	(Asterisk 13.10.0)
 +++ main/codec_builtin.c	(working copy)
-@@ -757,6 +757,63 @@
- 	.type = AST_MEDIA_TYPE_VIDEO,
- };
+@@ -774,2 +774,59 @@
  
 +static int silk_samples(struct ast_frame *frame)
 +{
@@ -103,60 +72,40 @@
 +	.smooth = 0,
 +};
 +
- static struct ast_codec t140red = {
- 	.name = "red",
- 	.description = "T.140 Realtime Text with redundancy",
-@@ -839,6 +896,10 @@
- 	res |= CODEC_REGISTER_AND_CACHE(vp8);
- 	res |= CODEC_REGISTER_AND_CACHE(t140red);
- 	res |= CODEC_REGISTER_AND_CACHE(t140);
-+	res |= CODEC_REGISTER_AND_CACHE(silk8);
-+	res |= CODEC_REGISTER_AND_CACHE_NAMED("silk12", silk12);
-+	res |= CODEC_REGISTER_AND_CACHE_NAMED("silk16", silk16);
-+	res |= CODEC_REGISTER_AND_CACHE_NAMED("silk24", silk24);
- 	res |= CODEC_REGISTER_AND_CACHE(none);
+ #define CODEC_REGISTER_AND_CACHE(codec) \
+@@ -806,2 +863,7 @@
  
- 	return res;
---- main/format_cache.c	(Asterisk 13.6.0)
++	res |= CODEC_REGISTER_AND_CACHE(silk8);
++	res |= CODEC_REGISTER_AND_CACHE(silk12);
++	res |= CODEC_REGISTER_AND_CACHE(silk16);
++	res |= CODEC_REGISTER_AND_CACHE(silk24);
++
+ 	res |= CODEC_REGISTER_AND_CACHE(g723);
+--- main/format_cache.c	(Asterisk 13.10.0)
 +++ main/format_cache.c	(working copy)
-@@ -230,2 +230,22 @@
+@@ -220,2 +220,10 @@
  /*!
-+ * \brief Built-in cached silk8 format.
++ * \brief Built-in cached SILK format.
 + */
 +struct ast_format *ast_format_silk8;
-+
-+/*!
-+ * \brief Built-in cached silk12 format.
-+ */
 +struct ast_format *ast_format_silk12;
-+
-+/*!
-+ * \brief Built-in cached silk16 format.
-+ */
 +struct ast_format *ast_format_silk16;
-+
-+/*!
-+ * \brief Built-in cached silk24 format.
-+ */
 +struct ast_format *ast_format_silk24;
 +
 +/*!
   * \brief Built-in cached t140 format.
-@@ -330,6 +350,10 @@
- 	ao2_replace(ast_format_vp8, NULL);
- 	ao2_replace(ast_format_t140_red, NULL);
- 	ao2_replace(ast_format_t140, NULL);
+@@ -294,2 +302,7 @@
+ 
 +	ao2_replace(ast_format_silk8, NULL);
 +	ao2_replace(ast_format_silk12, NULL);
 +	ao2_replace(ast_format_silk16, NULL);
 +	ao2_replace(ast_format_silk24, NULL);
- 	ao2_replace(ast_format_none, NULL);
- }
- 
-@@ -424,6 +448,14 @@
- 		ao2_replace(ast_format_t140_red, format);
- 	} else if (!strcmp(name, "t140")) {
++
+ 	ao2_replace(ast_format_g723, NULL);
+@@ -426,6 +439,14 @@
  		ao2_replace(ast_format_t140, format);
+ 	} else if (!strcmp(name, "none")) {
+ 		ao2_replace(ast_format_none, format);
 +	} else if (!strcmp(name, "silk8")) {
 +		ao2_replace(ast_format_silk8, format);
 +	} else if (!strcmp(name, "silk12")) {
@@ -165,85 +114,24 @@
 +		ao2_replace(ast_format_silk16, format);
 +	} else if (!strcmp(name, "silk24")) {
 +		ao2_replace(ast_format_silk24, format);
- 	} else if (!strcmp(name, "none")) {
- 		ao2_replace(ast_format_none, format);
  	}
---- main/format_compatibility.c	(Asterisk 13.6.0)
-+++ main/format_compatibility.c	(working copy)
-@@ -100,6 +100,14 @@
- 		return AST_FORMAT_T140_RED;
- 	} else if (ast_format_cmp(format, ast_format_t140) == AST_FORMAT_CMP_EQUAL) {
- 		return AST_FORMAT_T140;
-+	} else if (ast_format_cmp(format, ast_format_silk8) == AST_FORMAT_CMP_EQUAL) {
-+		return AST_FORMAT_SILK8;
-+	} else if (ast_format_cmp(format, ast_format_silk12) == AST_FORMAT_CMP_EQUAL) {
-+		return AST_FORMAT_SILK12;
-+	} else if (ast_format_cmp(format, ast_format_silk16) == AST_FORMAT_CMP_EQUAL) {
-+		return AST_FORMAT_SILK16;
-+	} else if (ast_format_cmp(format, ast_format_silk24) == AST_FORMAT_CMP_EQUAL) {
-+		return AST_FORMAT_SILK24;
- 	}
- 
- 	return 0;
-@@ -167,6 +175,14 @@
- 		return AST_FORMAT_T140_RED;
- 	} else if (codec->id == ast_format_get_codec_id(ast_format_t140)) {
- 		return AST_FORMAT_T140;
-+	} else if (codec->id == ast_format_get_codec_id(ast_format_silk8)) {
-+		return AST_FORMAT_SILK8;
-+	} else if (codec->id == ast_format_get_codec_id(ast_format_silk12)) {
-+		return AST_FORMAT_SILK12;
-+	} else if (codec->id == ast_format_get_codec_id(ast_format_silk16)) {
-+		return AST_FORMAT_SILK16;
-+	} else if (codec->id == ast_format_get_codec_id(ast_format_silk24)) {
-+		return AST_FORMAT_SILK24;
- 	}
- 
- 	return 0;
-@@ -268,7 +284,21 @@
- 	/*! T.140 Text format - ITU T.140, RFC 4103 */
- 	case AST_FORMAT_T140:
- 		return ast_format_t140_red;
-+
-+	/*! SILK8 */
-+	case AST_FORMAT_SILK8:
-+		return ast_format_silk8;
-+	/*! SILK12 */
-+	case AST_FORMAT_SILK12:
-+		return ast_format_silk12;
-+	/*! SILK16 */
-+	case AST_FORMAT_SILK16:
-+		return ast_format_silk16;
-+	/*! SILK24 */
-+	case AST_FORMAT_SILK24:
-+		return ast_format_silk24;
- 	}
-+
- 	return NULL;
  }
  
---- main/rtp_engine.c	(Asterisk 13.6.0)
+--- main/rtp_engine.c	(Asterisk 13.10.0)
 +++ main/rtp_engine.c	(working copy)
-@@ -2150,6 +2150,10 @@
- 	set_next_mime_type(NULL, AST_RTP_CN, "audio", "CN", 8000);
- 	set_next_mime_type(ast_format_jpeg, 0, "video", "JPEG", 90000);
- 	set_next_mime_type(ast_format_png, 0, "video", "PNG", 90000);
+@@ -2201,2 +2201,7 @@
+ 
 +	set_next_mime_type(ast_format_silk8, 0,  "audio", "SILK", 8000);
 +	set_next_mime_type(ast_format_silk12, 0,  "audio", "SILK", 12000);
 +	set_next_mime_type(ast_format_silk16, 0,  "audio", "SILK", 16000);
 +	set_next_mime_type(ast_format_silk24, 0,  "audio", "SILK", 24000);
- 	set_next_mime_type(ast_format_h261, 0, "video", "H261", 90000);
- 	set_next_mime_type(ast_format_h263, 0, "video", "H263", 90000);
- 	set_next_mime_type(ast_format_h263p, 0, "video", "h263-1998", 90000);
-@@ -2184,6 +2188,10 @@
- 	add_static_payload(18, ast_format_g729, 0);
- 	add_static_payload(19, NULL, AST_RTP_CN);         /* Also used for CN */
- 	add_static_payload(26, ast_format_jpeg, 0);
-+	add_static_payload(122, ast_format_silk8, 0);
-+	add_static_payload(123, ast_format_silk12, 0);
-+	add_static_payload(124, ast_format_silk16, 0);
-+	add_static_payload(125, ast_format_silk24, 0);
- 	add_static_payload(31, ast_format_h261, 0);
- 	add_static_payload(34, ast_format_h263, 0);
- 	add_static_payload(97, ast_format_ilbc, 0);
-
++
+	/* Define the static rtp payload mappings */
+@@ -2244,2 +2249,7 @@
+ 	add_static_payload(107, ast_format_opus, 0);
++
++	add_static_payload(-1, ast_format_silk8, 0);
++	add_static_payload(-1, ast_format_silk12, 0);
++	add_static_payload(-1, ast_format_silk16, 0);
++	add_static_payload(-1, ast_format_silk24, 0);
+ 
