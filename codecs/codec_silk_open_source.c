@@ -1,5 +1,7 @@
 /*** MODULEINFO
 	<depend>silk</depend>
+	<conflict>codec_silk</conflict>
+	<defaultenabled>yes</defaultenabled>
  ***/
 
 #include "asterisk.h"
