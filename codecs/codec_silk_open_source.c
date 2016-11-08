@@ -60,7 +60,7 @@ static int lintosilk_new(struct ast_trans_pvt *pvt)
 	coder->encControl.maxInternalSampleRate = (SKP_int32) pvt->t->dst_codec.sample_rate;
 	coder->encControl.packetSize = SILK_FRAME_LENGTH_MS * pvt->t->dst_codec.sample_rate / 1000;
 	/* defaults; change here and in res/res_format_attr_silk.c:default_silk_attr */
-	coder->encControl.complexity           = 2;
+	coder->encControl.complexity           = 6;
 	coder->encControl.useDTX               = attr ? attr->useDTX               : 0;
 	coder->encControl.useInBandFEC         = attr ? attr->useInBandFEC         : 1;
 	coder->encControl.packetLossPercentage = attr ? attr->packetLossPercentage : 0;
