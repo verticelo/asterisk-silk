@@ -9,10 +9,10 @@
 
 /* Asterisk internal defaults; can differ from RFC defaults */
 static SKP_SILK_SDK_EncControlStruct default_silk_attr = {
-	.useDTX               = 0,             /* off              */
+	.useDTX               = 1,             /* off              */
 	.useInBandFEC         = 1,             /* supported        */
-	.packetLossPercentage = 0,             /* no loss expected */
-	.bitRate              = SKP_int32_MAX, /* give everything  */
+	.packetLossPercentage = 10,             /* no loss expected */
+	.bitRate              = 16000, /* give everything  */
 };
 
 static void silk_destroy(struct ast_format *format)
