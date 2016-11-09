@@ -12,7 +12,7 @@ static SKP_SILK_SDK_EncControlStruct default_silk_attr = {
 	.useDTX               = 1,             /* off              */
 	.useInBandFEC         = 1,             /* supported        */
 	.packetLossPercentage = 10,             /* no loss expected */
-	.bitRate              = 16000, /* give everything  */
+	.bitRate              = 24000, /* give everything  */
 };
 
 static void silk_destroy(struct ast_format *format)
